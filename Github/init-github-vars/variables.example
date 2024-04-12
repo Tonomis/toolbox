@@ -1,0 +1,4 @@
+CLOUDFRONT_ID=todo
+RDS_CLASS=db.t3.micro
+VITE_CLIENT_URL=todo
+TO_DEPLOY=no
