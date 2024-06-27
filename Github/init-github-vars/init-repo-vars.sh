@@ -23,6 +23,9 @@ Following flags are available:
 
   -r  Repo to init
 
+  -g  Global variables file
+      no global variables will be set if this flag is not provided
+
   -o  Organisation
 
   -h  Print script help.\n\n"
@@ -32,7 +35,7 @@ print_help() {
 }
 
 # Parse options
-while getopts s:v:o:h flag; do
+while getopts s:v:o:r:g:h flag; do
   case "${flag}" in
     s)
       SECRETS_FILE="${OPTARG}";;
@@ -40,6 +43,8 @@ while getopts s:v:o:h flag; do
       VARIABLES_FILE="${OPTARG}";;
     o)
       ORGANISATION="${OPTARG}";;
+    g)
+      GLOBAL_VARIABLES_FILE="${OPTARG}";;
     r)
       REPOSITORY="${OPTARG}";;
     h | *)
@@ -53,3 +58,7 @@ do
     gh variable set --repo "${ORGANISATION}/${REPOSITORY}" --env $env --env-file $VARIABLES_FILE
     gh secret set --repo "${ORGANISATION}/${REPOSITORY}" --env $env --env-file $SECRETS_FILE
 done
+
+if [ -n "$GLOBAL_VARIABLES_FILE" ]; then
+    gh variable set --repo "${ORGANISATION}/${REPOSITORY}" --env global --env-file $GLOBAL_VARIABLES_FILE
+fi
