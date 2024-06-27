@@ -9,7 +9,7 @@ no_color='\033[0m'
 PERMISSION="pull"
 
 # Declare script helper
-TEXT_HELPER="\nThis script aims to grant permission to a github team in every repository.
+TEXT_HELPER="\nThis script aims to list all repository's node version for an Org.
 
 Following flags are available:
 
@@ -37,6 +37,7 @@ for repo in $(gh repo list $ORGANISATION --limit 1000 --json name -q ".[].name")
         if [ -s error.log ]; then
             echo "$repo do not have a .nvmrc file"
         else
+            echo "$repo node version: $(cat reposversion)"
             echo "$repo node version: $(cat reposversion)" >> listofreposversion
         fi
 done
