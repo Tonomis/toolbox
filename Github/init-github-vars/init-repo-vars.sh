@@ -9,6 +9,7 @@ no_color='\033[0m'
 SECRETS_FILE="secrets.env"
 VARIABLES_FILE="variables.env"
 REPOSITORY="test"
+ENVIRONMENTS="live staging develop"
 
 # Declare script helper
 TEXT_HELPER="\nThis script aims to a new github repository by providing default variables & secrets in live, staging & develop environments. You'll need to provide two files to populate either variables & secrets.
@@ -28,6 +29,10 @@ Following flags are available:
 
   -o  Organisation
 
+  -e Environments
+      Default is live staging develop
+
+
   -h  Print script help.\n\n"
 
 print_help() {
@@ -35,7 +40,7 @@ print_help() {
 }
 
 # Parse options
-while getopts s:v:o:r:g:h flag; do
+while getopts s:v:o:r:g:e:h flag; do
   case "${flag}" in
     s)
       SECRETS_FILE="${OPTARG}";;
@@ -47,13 +52,15 @@ while getopts s:v:o:r:g:h flag; do
       GLOBAL_VARIABLES_FILE="${OPTARG}";;
     r)
       REPOSITORY="${OPTARG}";;
+    e)
+      ENVIRONMENTS="${OPTARG}";;
     h | *)
       print_help
       exit 0;;
   esac
 done
 
-for env in "live" "staging" "develop"
+for env in $ENVIRONMENTS;
 do
     gh variable set --repo "${ORGANISATION}/${REPOSITORY}" --env $env --env-file $VARIABLES_FILE
     gh secret set --repo "${ORGANISATION}/${REPOSITORY}" --env $env --env-file $SECRETS_FILE
