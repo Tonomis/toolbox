@@ -1,0 +1,131 @@
+{
+  // visuals
+  "telemetry.telemetryLevel": "off",
+  "window.autoDetectColorScheme": true,
+  "workbench.preferredLightColorTheme": "GitHub Dark",
+  "workbench.preferredDarkColorTheme": "GitHub Dark",
+  "workbench.fontAliasing": "antialiased",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.editor.showTabs": "multiple",
+  "editor.fontFamily": "Input Mono, Fira Code, monospace",
+  "editor.fontLigatures": "'ss01', 'ss02', 'ss03', 'ss06', 'zero'",
+  "editor.cursorBlinking": "phase",
+  "editor.suggestSelection": "first",
+  "editor.wordWrap": "on",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.tabSize": 2,
+  "editor.minimap.enabled": false,
+  "search.exclude": {
+    "**/.git": true,
+    "**/.nuxt": true,
+    "**/.pnpm": true,
+    "**/.vscode": true,
+    "**/.yarn": true,
+    "**/dist/**": true,
+    "**/logs": true,
+    "**/node_modules": true,
+    "**/out/**": true,
+    "**/package-lock.json": true,
+    "**/pnpm-lock.yaml": true,
+    "**/yarn.lock": true
+  },
+
+  // general
+  "editor.unicodeHighlight.invisibleCharacters": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  // git
+  "git.autofetch": true,
+  "git.untrackedChanges": "separate",
+  // github
+  "githubPullRequests.pullBranch": "never",
+  // eslint
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "never",
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+  "eslint.quiet": true,
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "json5"
+  ],
+  // stylelint
+  "css.validate": false,
+  "less.validate": true,
+  "scss.validate": true,
+  "files.associations": {
+    "*.css": "postcss",
+    "*.hcl": "terraform"
+  },
+  // languages
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "javascript.preferences.quoteStyle": "single",
+  "javascript.preferences.importModuleSpecifierEnding": "js",
+  "javascript.suggest.completeJSDocs": true,
+  "javascript.suggest.jsdoc.generateReturns": true,
+  "typescript.preferences.importModuleSpecifierEnding": "js",
+  "[html]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[markdown]": {
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": true,
+      "strings": true
+    },
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+  },
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.formatOnSave": true
+  },
+
+  "files.autoSave": "afterDelay",
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "projectManager.git.baseFolders": ["/home/florian/Project"],
+  "explorer.confirmDelete": false,
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "terminal.integrated.persistentSessionReviveProcess": "never",
+  "markdown-preview-enhanced.previewTheme": "atom-dark.css",
+  "git.ignoreRebaseWarning": true,
+  "explorer.confirmDragAndDrop": false,
+  "git.enableCommitSigning": true,
+  "editor.inlineSuggest.enabled": true,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "scminput": false
+  },
+  "window.restoreWindows": "none",
+  "window.menuBarVisibility": "toggle",
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.preferredHighContrastColorTheme": "GitHub Dark",
+  "terminal.external.linuxExec": "Konsole",
+  "terminal.integrated.tabs.defaultColor": "terminal.ansiBlack",
+  "workbench.colorTheme": "GitHub Dark",
+  "workbench.preferredHighContrastLightColorTheme": "GitHub Dark",
+  "yaml.schemas": {
+    "file:///home/florian/.vscode/extensions/docsmsft.docs-yaml-1.0.4/dist/toc.schema.json": "/toc\\.yml/i"
+  },
+  "diffEditor.ignoreTrimWhitespace": false,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "scm.experimental.showHistoryGraph": true
+}
