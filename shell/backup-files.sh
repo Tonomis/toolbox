@@ -10,7 +10,7 @@ i=1
 NOW=$(date +'%Y-%m-%dT%H-%M-%S')
 
 # Default
-BACKUP_DIR="$(pwd)/backup_$NOW"
+BACKUP_DIR="$(pwd)/backup-$NOW"
 BACKUP_COMPRESSION="false"
 BACKUP_COMPRESSION_ARGS="--no-compress"
 BACKUP_FULL="false"
@@ -43,7 +43,7 @@ while getopts hcfo: flag; do
     f)
       BACKUP_FULL="true";;
     o)
-      BACKUP_DIR="${OPTARG}/backup_$NOW";;
+      BACKUP_DIR="${OPTARG}/backup-$NOW";;
     h | *)
       print_help
       exit 0;;

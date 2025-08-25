@@ -2,3 +2,4 @@
 *.env
 listofreposversion
 reposversion
+secrets/

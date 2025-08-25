@@ -5,9 +5,6 @@ red='\e[0;31m'
 no_color='\033[0m'
 
 
-# Defaults
-PERMISSION="pull"
-
 # Declare script helper
 TEXT_HELPER="\nThis script aims to list all repository's node version for an Org.
 
