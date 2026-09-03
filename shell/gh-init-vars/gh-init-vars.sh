@@ -4,9 +4,10 @@
 red='\e[0;31m'
 no_color='\033[0m'
 
-# Defaults
-SECRETS_FILE="/home/florian/Projects/Perso/toolbox/github/init-github-vars/secrets.env"
-VARIABLES_FILE="/home/florian/Projects/Perso/toolbox/github/init-github-vars/variables.env"
+# Defaults, resolved next to this script so the checkout can live anywhere
+SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd -P)"
+SECRETS_FILE="$SCRIPT_DIR/secrets.env"
+VARIABLES_FILE="$SCRIPT_DIR/variables.env"
 ENVIRONMENTS="live staging develop"
 
 # Check if GitHub CLI is available
@@ -39,7 +40,7 @@ Available flags:
   -h  Print this help message.\n"
 
 print_help() {
-  printf "$TEXT_HELPER"
+  printf "%b" "$TEXT_HELPER"
 }
 
 # Parse options
@@ -66,15 +67,25 @@ if [ -z "$ORGANISATION" ]; then
     exit 1
 fi
 
+# The .env files are gitignored, so a fresh clone only ships the .example
+# ones. Fail with a useful message instead of letting gh error out.
+for file in "$VARIABLES_FILE" "$SECRETS_FILE"; do
+    if [ ! -f "$file" ]; then
+        echo -e "${red}Error: file not found: $file${no_color}"
+        echo -e "Copy the matching .example file, or pass -s / -v."
+        exit 1
+    fi
+done
+
 # Set variables and secrets for each environment
 for env in $ENVIRONMENTS; do
     echo -e "${no_color}Setting variables and secrets for environment: $env"
-    gh variable set --repo "${ORGANISATION}/${REPOSITORY}" --env $env --env-file $VARIABLES_FILE
-    gh secret set --repo "${ORGANISATION}/${REPOSITORY}" --env $env --env-file $SECRETS_FILE
+    gh variable set --repo "${ORGANISATION}/${REPOSITORY}" --env "$env" --env-file "$VARIABLES_FILE"
+    gh secret set --repo "${ORGANISATION}/${REPOSITORY}" --env "$env" --env-file "$SECRETS_FILE"
 done
 
 # Set global variables if provided
 if [ -n "$GLOBAL_VARIABLES_FILE" ]; then
     echo -e "${no_color}Setting global variables for repository: $REPOSITORY"
-    gh variable set --repo "${ORGANISATION}/${REPOSITORY}" --env global --env-file $GLOBAL_VARIABLES_FILE
+    gh variable set --repo "${ORGANISATION}/${REPOSITORY}" --env global --env-file "$GLOBAL_VARIABLES_FILE"
 fi
