@@ -1,130 +1,123 @@
 #!/bin/bash
+# Base profile: core CLI tooling only. GUI applications live in the
+# 'desktop' profile.
 
-# Colorize terminal
-red='\e[0;31m'
-green='\e[0;32m'
-blue='\e[0;34m'
-grey='\e[0;37m'
-no_color='\033[0m'
+source "$(dirname "${BASH_SOURCE[0]}")/_common.sh"
 
-# Log function
-log() {
-    echo -e "${2}[$i] $1${no_color}"
-    ((i++))
-}
-# example usage: log "Updating system and installing base dependencies" $blue
-
-# Bases packages
-BASES_PACKAGES=" atuin \
-  audacity \
-  age \
+# Base packages
+BASE_PACKAGES="age \
+  atuin \
   bat \
   cheat \
-  cups \
   docker \
-  docker-compose \
   docker-buildx \
-  firefox \
+  docker-compose \
+  direnv \
+  fastfetch \
+  fd \
   fzf \
+  git \
+  git-delta \
+  go-yq \
   jq \
-  keepassxc \
-  kitty \
   lazydocker \
+  lazygit \
   ldns \
   less \
-  man \
   man-db \
+  man-pages \
   nmap \
-  neofetch \
-  rdesktop \
+  ripgrep \
   rsync \
+  shellcheck \
   sshs \
   tree \
   vim \
-  visual-studio-code-bin \
-  yq \
-  wl-clipboard "
-
-# Install aur helper
-install_yay() {
-    if ! pacman -Q yay &>/dev/null; then
-        log "Installing yay" $blue
-        mkdir /tmp/yay
-        cd /tmp/yay
-        curl -OJ 'https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=yay'
-        makepkg -si --noconfirm
-        cd
-        rm -rf /tmp/yay
-    else
-        log "yay is already installed" $green
-    fi
-}
-
-# Function to check and install packages
-install_packages() {
-    for pkg in $1; do
-        if ! pacman -Q $pkg &>/dev/null; then
-            log "Installing $pkg" $blue
-            yay -S --needed $pkg --noconfirm
-        else
-            log "$pkg is already installed" $green
-        fi
-    done
-}
-
+  wl-clipboard \
+  yamllint \
+  zoxide"
 
 # Function to install zsh
 install_zsh() {
-    log "Installing zsh" $blue
-    sudo pacman -S --needed zsh --noconfirm
+    log "Installing zsh" "$blue"
+    run sudo pacman -S --needed --noconfirm zsh
+}
+
+OMZ_INSTALLER="https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
+
+# Install oh-my-zsh, which the shipped .zshrc sources. --keep-zshrc stops the
+# installer from replacing an existing .zshrc with its own template, and
+# --unattended stops it from running chsh or dropping into a new shell.
+install_oh_my_zsh() {
+    if [ -d "$HOME/.oh-my-zsh" ]; then
+        log "oh-my-zsh is already installed" "$green"
+        return 0
+    fi
+
+    if ! confirm "Install oh-my-zsh by piping $OMZ_INSTALLER to sh?"; then
+        log "Skipping oh-my-zsh" "$grey"
+        return 0
+    fi
+
+    log "Installing oh-my-zsh" "$blue"
+    if [ "$DRY_RUN" = true ]; then
+        printf "%b    [dry-run] sh -c \"\$(curl -fsSL %s)\" \"\" --unattended --keep-zshrc%b\n" \
+            "$grey" "$OMZ_INSTALLER" "$no_color"
+    elif ! sh -c "$(curl -fsSL "$OMZ_INSTALLER")" "" --unattended --keep-zshrc; then
+        log "oh-my-zsh installation failed" "$red"
+        FAILED_PACKAGES+=("oh-my-zsh")
+    fi
 }
 
 # Set zsh as default shell
 set_default_shell() {
-    if [ "$SHELL" != "/usr/bin/zsh" ]; then
-        log "Setting zsh as the default shell" $blue
-            chsh -s /usr/bin/zsh
-    else 
-        log "zsh is already the default shell" $green
+    if [ "$(getent passwd "$USER" | cut -d: -f7)" = "/usr/bin/zsh" ]; then
+        log "zsh is already the default shell" "$green"
+        return 0
+    fi
+
+    # chsh always prompts for a password, so let the user opt out of the
+    # interruption in the middle of an otherwise unattended run.
+    if confirm "Set zsh as the default shell? (asks for your password)"; then
+        log "Setting zsh as the default shell" "$blue"
+        run chsh -s /usr/bin/zsh
+    else
+        log "Keeping the current default shell" "$grey"
     fi
 }
 
 # Enable and start Docker service
 configure_docker() {
-    log "Enabling and starting Docker service" $blue
-    sudo systemctl enable docker
-    sudo systemctl start docker
+    log "Enabling and starting Docker service" "$blue"
+    run sudo systemctl enable --now docker
 }
 
-# Create Projects directory
-create_projects_directory() {
-    log "Creating Projects directory" $blue
-    if [ ! -d ~/Projects ]; then
-        mkdir -p ~/Projects
-    else
-        log "Projects directory already exists" $green
-    fi
-    log "Creating MySG directory" $blue
-    if [ ! -d ~/Projects/MySG ]; then
-        mkdir -p ~/Projects/MySG
-    else
-        log "MySG directory already exists" $green
-    fi
-    log "Creating Perso directory" $blue
-    if [ ! -d ~/Projects/Perso ]; then
-        mkdir -p ~/Projects/Perso
-    else
-        log "Perso directory already exists" $green
-    fi
+# Directories to scaffold under $HOME, override with
+# PROJECT_DIRS="Projects Projects/foo" to use a different layout.
+: "${PROJECT_DIRS:=Projects Projects/Work Projects/Perso}"
+
+# Create Projects directories
+create_projects_directories() {
+    local name dir
+    for name in $PROJECT_DIRS; do
+        dir="$HOME/$name"
+        if [ -d "$dir" ]; then
+            log "$dir already exists" "$green"
+        else
+            log "Creating $dir" "$blue"
+            run mkdir -p "$dir"
+        fi
+    done
 }
 
-main() {
+setup_base() {
     install_yay
-    install_packages "$BASES_PACKAGES"
+    install_packages "base" "$BASE_PACKAGES"
     install_zsh
+    install_oh_my_zsh
     set_default_shell
     configure_docker
-    create_projects_directory
+    create_projects_directories
 }
 
-main
+setup_base

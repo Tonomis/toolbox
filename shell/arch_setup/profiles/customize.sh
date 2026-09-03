@@ -1,36 +1,20 @@
 #!/bin/bash
+# System customization: KDE theme, scroll direction, fonts, Num Lock.
 
-# Colorize terminal
-red='\e[0;31m'
-green='\e[0;32m'
-blue='\e[0;34m'
-grey='\e[0;37m'
-no_color='\033[0m'
+source "$(dirname "${BASH_SOURCE[0]}")/_common.sh"
 
-# Log function
-log() {
-    echo -e "${2}[$i] $1${no_color}"
-    ((i++))
-}
-# example usage: log "Updating system and installing base dependencies" $blue
-
-# Bases packages
+# Customization packages
 CUSTOMIZATION_PACKAGES=""
 
-# Function to check and install packages
-install_packages() {
-    for pkg in $1; do
-        if ! pacman -Q $pkg &>/dev/null; then
-            log "Installing $pkg" $red
-            yay -S --needed $pkg --noconfirm
-        else
-            log "$pkg is already installed" $green
-        fi
-    done
+customize_system() {
+    if [ -n "${CUSTOMIZATION_PACKAGES// /}" ]; then
+        install_yay
+        install_packages "customization" "$CUSTOMIZATION_PACKAGES"
+    fi
+
+    # TODO: KDE theme, scroll direction, fonts and Num Lock are advertised in
+    # the help text but not implemented yet.
+    log "No customization step implemented yet" "$grey"
 }
 
-main() {
-    install_packages "$CUSTOMIZATION_PACKAGES"
-}
-
-main
+customize_system

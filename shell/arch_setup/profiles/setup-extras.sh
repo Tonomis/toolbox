@@ -1,76 +1,58 @@
 #!/bin/bash
+# Extras profile: personal applications, plus the optional Steam setup.
 
-# Colorize terminal
-red='\e[0;31m'
-green='\e[0;32m'
-blue='\e[0;34m'
-grey='\e[0;37m'
-no_color='\033[0m'
-
-# Log function
-log() {
-    echo -e "${2}[$i] $1${no_color}"
-    ((i++))
-}
-# example usage: log "Updating system and installing base dependencies" $blue
+source "$(dirname "${BASH_SOURCE[0]}")/_common.sh"
 
 # Extra packages, more personal stuff
 EXTRA_PACKAGES="beeper \
-    discord \
-    obs-studio \
-    obsidian \
-    picard \
-    nicotine+ \
-    vlc"
-
-# Function to check and install packages
-install_packages() {
-    for pkg in $1; do
-        if ! pacman -Q $pkg &>/dev/null; then
-            log "Installing $pkg" $blue
-            yay -S --needed $pkg --noconfirm
-        else
-            log "$pkg is already installed" $green
-        fi
-    done
-}
+  discord \
+  nicotine+ \
+  obs-studio \
+  obsidian \
+  picard \
+  vlc"
 
 # Function to install and configure Steam
 install_steam() {
-    log "Installing and configuring Steam" $blue
-        # Enable multilib repository
-        log "Enabling multilib repository" $blue
-        sudo sed -i '/\[multilib\]/,/Include/ s/^#//' /etc/pacman.conf
-        sudo pacman -Sy
+    if ! confirm "Install and configure Steam? (enables the multilib repository)"; then
+        log "Skipping Steam" "$grey"
+        return 0
+    fi
 
-        # Install Steam
-        sudo pacman -S --needed steam
+    log "Enabling multilib repository" "$blue"
+    run sudo sed -i '/\[multilib\]/,/Include/ s/^#//' /etc/pacman.conf
+    run sudo pacman -Sy
 
-        # Install appropriate 32-bit Vulkan driver
-        sudo pacman -S --needed lib32-vulkan-icd-loader
+    log "Installing Steam and its 32-bit dependencies" "$blue"
+    run sudo pacman -S --needed --noconfirm \
+        steam \
+        lib32-vulkan-icd-loader \
+        lib32-mesa \
+        xdg-desktop-portal \
+        xdg-desktop-portal-gtk \
+        ttf-liberation
 
-        # Install 32-bit OpenGL graphics driver
-        sudo pacman -S --needed lib32-mesa
+    log "Generating the en_US.UTF-8 locale" "$blue"
+    run sudo sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+    run sudo locale-gen
 
-        # Generate en_US.UTF-8 locale
-        sudo sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
-        sudo locale-gen
+    # Some games need a higher mmap limit. Keep it in its own file so re-runs
+    # overwrite instead of appending the same line over and over.
+    log "Raising vm.max_map_count" "$blue"
+    if [ "$DRY_RUN" = true ]; then
+        printf "%b    [dry-run] write vm.max_map_count=262144 to /etc/sysctl.d/99-max-map-count.conf%b\n" "$grey" "$no_color"
+    else
+        echo 'vm.max_map_count=262144' | sudo tee /etc/sysctl.d/99-max-map-count.conf >/dev/null
+        sudo sysctl -p /etc/sysctl.d/99-max-map-count.conf
+    fi
 
-        # Install XDG Desktop Portal and a backend
-        sudo pacman -S --needed xdg-desktop-portal xdg-desktop-portal-gtk
-
-        # Install a free alternative to the Arial font
-        sudo pacman -S --needed ttf-liberation
-
-        # Increase vm.max_map_count for some games
-        echo 'vm.max_map_count=262144' | sudo tee -a /etc/sysctl.d/99-sysctl.conf
-        sudo sysctl -p /etc/sysctl.d/99-sysctl.conf
-
-        log "Steam installation and configuration completed. Please restart your system." $green
+    log "Steam is installed, a reboot is recommended" "$green"
 }
 
-main() {
-    install_packages "$EXTRA_PACKAGES"
+setup_extras() {
+    install_yay
+    install_packages "extras" "$EXTRA_PACKAGES"
+    install_steam
 }
 
-main
+setup_extras
