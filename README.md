@@ -6,6 +6,7 @@ A collection of usefull (or not) scripts and dotfiles.
 | Script                                                                   | Description                                                    |
 | ------------------------------------------------------------------------ | -------------------------------------------------------------- |
 | [setup-arch.sh](shell/arch_setup/setup-arch.sh)                          | Set up Arch Linux with essential packages and configurations   |
+| [backup-home.sh](shell/backup-home.sh)                                   | Backup /etc, dotfiles and project directories with rsync       |
 | [system-check.sh](shell/system-check.sh)                                 | Quick Linux system diagnostic (OS agnostic, server or desktop) |
 | [gh-create-repo-from-template.sh](shell/gh-create-repo-from-template.sh) | Create a new Github repository from a template repository      |
 | [gh-init-vars.sh](shell/gh-init-vars/gh-init-vars.sh)                    | Initialize environment variables for a Github repository       |
