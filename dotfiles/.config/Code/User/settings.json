@@ -1,9 +1,17 @@
 {
+  // ─────────────────────────────────────────────────────────────
   // visuals
+  // ─────────────────────────────────────────────────────────────
   "telemetry.telemetryLevel": "off",
   "window.autoDetectColorScheme": true,
+  // NB: les deux thèmes préférés pointent sur "GitHub Dark".
+  // Si c'est voulu, autoDetectColorScheme ne sert à rien ; sinon
+  // mets "GitHub Light" dans preferredLightColorTheme.
   "workbench.preferredLightColorTheme": "GitHub Dark",
   "workbench.preferredDarkColorTheme": "GitHub Dark",
+  "workbench.preferredHighContrastColorTheme": "GitHub Dark",
+  "workbench.preferredHighContrastLightColorTheme": "GitHub Dark",
+  "workbench.colorTheme": "GitHub Dark",
   "workbench.fontAliasing": "antialiased",
   "workbench.iconTheme": "material-icon-theme",
   "workbench.editor.showTabs": "multiple",
@@ -30,21 +38,50 @@
     "**/yarn.lock": true
   },
 
+  // ─────────────────────────────────────────────────────────────
   // general
+  // ─────────────────────────────────────────────────────────────
   "editor.unicodeHighlight.invisibleCharacters": false,
+  // À reconsidérer si tu ouvres des repos clients :
+  // "open" désactive le prompt de workspace trust sur fichiers isolés.
   "security.workspace.trust.untrustedFiles": "open",
-  // git
+  "files.autoSave": "afterDelay",
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.confirmPasteNative": false,
+  "window.restoreWindows": "none",
+  "window.menuBarVisibility": "toggle",
+  "diffEditor.ignoreTrimWhitespace": false,
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "editor.inlineSuggest.enabled": true,
+  "terminal.integrated.persistentSessionReviveProcess": "never",
+  "terminal.integrated.tabs.defaultColor": "terminal.ansiBlack",
+  "terminal.external.linuxExec": "Konsole",
+  "projectManager.git.baseFolders": ["/home/florian/Projects"],
+
+  // ─────────────────────────────────────────────────────────────
+  // git / github
+  // ─────────────────────────────────────────────────────────────
   "git.autofetch": true,
   "git.untrackedChanges": "separate",
-  // github
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.ignoreRebaseWarning": true,
+  "git.enableCommitSigning": true,
   "githubPullRequests.pullBranch": "never",
-  // eslint
+  "scm.experimental.showHistoryGraph": true,
+
+  // ─────────────────────────────────────────────────────────────
+  // eslint / stylelint
+  // ─────────────────────────────────────────────────────────────
   "editor.codeActionsOnSave": {
     "source.fixAll": "never",
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
   "eslint.quiet": true,
+  "eslint.nodeEnv": "",
+  "eslint.nodePath": "~/.local/share/pnpm",
   "eslint.validate": [
     "javascript",
     "typescript",
@@ -57,17 +94,35 @@
     "jsonc",
     "json5"
   ],
-  // stylelint
   "css.validate": false,
   "less.validate": true,
   "scss.validate": true,
+
+  // ─────────────────────────────────────────────────────────────
+  // file associations
+  // ─────────────────────────────────────────────────────────────
   "files.associations": {
     "*.css": "postcss",
-    "*.hcl": "terraform"
+    "*.hcl": "terraform",
+    // .tpl est sans ambiguïté : uniquement des helpers Helm.
+    "*.tpl": "helm",
+    // charts/**/templates/ = 110 fichiers, 100% templatés {{ }} : du vrai
+    // Helm. Le langage "helm" y est correct (et l'autocomplete Kubernetes
+    // y est de toute façon impossible, un {{ .Values.x }} n'est pas du YAML).
+    "**/charts/**/templates/**/*.yaml": "helm",
+    "**/charts/**/templates/**/*.yml": "helm",
+    // apps/**/templates/ = app-of-apps Argo CD, 64 YAML purs / 39 templatés.
+    // On force "yaml" pour que le LSP Red Hat tourne : sans ça, l'extension
+    // Kubernetes revendique ces fichiers en "helm" via ses propres
+    // filenamePatterns (**/templates/**/*.yaml) et il n'y a aucune
+    // autocomplete. C'est cette ligne qui rend l'autocomplete possible.
+    "**/apps/**/templates/**/*.yaml": "yaml",
+    "**/apps/**/templates/**/*.yml": "yaml"
   },
+
+  // ─────────────────────────────────────────────────────────────
   // languages
-  "[javascript]": {
-  },
+  // ─────────────────────────────────────────────────────────────
   "javascript.preferences.quoteStyle": "single",
   "javascript.preferences.importModuleSpecifierEnding": "js",
   "javascript.suggest.completeJSDocs": true,
@@ -86,68 +141,82 @@
     "editor.formatOnPaste": true,
     "editor.defaultFormatter": "yzhang.markdown-all-in-one"
   },
+  "markdown.extension.completion.enabled": true,
+  "markdown-preview-enhanced.previewTheme": "atom-dark.css",
   "[terraform]": {
     "editor.defaultFormatter": "hashicorp.terraform",
     "editor.formatOnSave": true
   },
-
-  "files.autoSave": "afterDelay",
-  "git.confirmSync": false,
-  "git.enableSmartCommit": true,
-  "projectManager.git.baseFolders": ["/home/florian/Project"],
-  "explorer.confirmDelete": false,
   "[python]": {
     "editor.formatOnType": true
   },
-  "terminal.integrated.persistentSessionReviveProcess": "never",
-  "markdown-preview-enhanced.previewTheme": "atom-dark.css",
-  "git.ignoreRebaseWarning": true,
-  "explorer.confirmDragAndDrop": false,
-  "git.enableCommitSigning": true,
-  "editor.inlineSuggest.enabled": true,
-  "github.copilot.enable": {
-    "*": true,
-    "plaintext": true,
-    "markdown": true,
-    "scminput": false
-  },
-  "window.restoreWindows": "none",
-  "window.menuBarVisibility": "toggle",
-  "[jsonc]": {
-  },
-  "workbench.preferredHighContrastColorTheme": "GitHub Dark",
-  "terminal.external.linuxExec": "Konsole",
-  "terminal.integrated.tabs.defaultColor": "terminal.ansiBlack",
-  "workbench.colorTheme": "GitHub Dark",
-  "workbench.preferredHighContrastLightColorTheme": "GitHub Dark",
-  // yaml — disable validation globally, re-enable only for plain yaml files
-  // (prevents Red Hat YAML extension from validating Helm templates)
+
+  // ─────────────────────────────────────────────────────────────
+  // YAML / Kubernetes
+  // ─────────────────────────────────────────────────────────────
+  // validate et completion sont deux réglages indépendants : on garde
+  // l'autocomplete et le hover, sans les faux positifs de validation sur
+  // les fichiers qui contiennent encore du {{ }} sous apps/**/templates/.
+  // Passe à true si tu veux les diagnostics (et les ~39 erreurs qui vont avec).
   "yaml.validate": false,
+  "yaml.completion": true,
+  "yaml.hover": true,
+  "yaml.format.enable": true,
+  "yaml.schemaStore.enable": true,
+  // Aligne le schéma embarqué sur la version de tes clusters, sinon
+  // l'autocomplete propose des champs qui n'existent pas chez toi.
+  "yaml.kubernetesVersion": "1.31",
   "yaml.schemas": {
-    "https://json.schemastore.org/chart.json": "**/helm/Chart.yaml",
-    "file:///home/florian/.vscode/extensions/docsmsft.docs-yaml-1.0.6/dist/toc.schema.json": "/toc\\.yml/i"
+    // Schéma Kubernetes embarqué (mot-clé spécial "kubernetes").
+    // Globs calés sur l'arborescence réelle : l'essentiel des manifests
+    // vit sous apps/**/templates/ (Argo CD) et argo-cd/**.
+    "kubernetes": [
+      "**/apps/**/templates/*.yaml",
+      "**/apps/**/templates/**/*.yaml",
+      "**/argo-cd/**/*.yaml",
+      "**/bootstrap-manifests/*.yaml",
+      "manifests/**/*.yaml",
+      "manifests/**/*.yml",
+      "base/**/*.yaml",
+      "deploy/**/*.yaml",
+      "k8s/**/*.yaml",
+      "k8s/**/*.yml"
+    ],
+    "https://json.schemastore.org/chart.json": "**/Chart.yaml",
+    "https://json.schemastore.org/chart-lock.json": "**/Chart.lock",
+    "https://json.schemastore.org/kustomization.json": "**/kustomization.yaml",
+    "https://json.schemastore.org/helmfile.json": "**/helmfile.yaml",
+    "https://json.schemastore.org/skaffold.json": "**/skaffold.yaml",
+    "https://json.schemastore.org/pre-commit-config.json": "**/.pre-commit-config.yaml"
   },
-  "redhat.telemetry.enabled": false,
+  "yaml.disableSchemaDetection": [
+    // GitHub Actions / Docker Compose / Azure Pipelines sont désormais
+    // auto-exclus par l'extension quand l'extension dédiée est installée.
+    // On garde les forks non couverts :
+    "**/.gitea/workflows/*.yml",
+    "**/.gitea/workflows/*.yaml",
+    "**/.forgejo/workflows/*.yml",
+    "**/.forgejo/workflows/*.yaml"
+  ],
   "[yaml]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  },
-  "[helm-template]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.autoIndent": "advanced",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    // Volontairement à false : le formateur YAML reflow les blocs
+    // (listes, chaînes multilignes) et fait du bruit dans les diffs
+    // de manifests. Passe à true si tu préfères l'inverse.
     "editor.formatOnSave": false
   },
-  "diffEditor.ignoreTrimWhitespace": false,
-  "scm.experimental.showHistoryGraph": true,
-  "explorer.confirmPasteNative": false,
-  "editor.gotoLocation.multipleDefinitions": "goto",
-  "eslint.nodeEnv": "",
-  "eslint.nodePath": "~/.local/share/pnpm",
-  "github.copilot.advanced": {
-
-    
+  "[helm]": {
+    "editor.formatOnSave": false,
+    "editor.tabSize": 2
   },
-  "chat.agent.enabled": true,
-  "docker.extension.enableComposeLanguageServer": false,
-  "github.copilot.selectedCompletionModel": "",
-  "markdown.extension.completion.enabled": true,
   "[dockercompose]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
@@ -162,23 +231,53 @@
   "[github-actions-workflow]": {
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
+  "redhat.telemetry.enabled": false,
+  "docker.extension.enableComposeLanguageServer": false,
+
+  // ─────────────────────────────────────────────────────────────
+  // kubernetes tools
+  // ─────────────────────────────────────────────────────────────
+  "vs-kubernetes": {
+    "vs-kubernetes.crd-code-completion": "enabled",
+    "disable-linters": ["resource-limits"]
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // copilot / chat
+  // ─────────────────────────────────────────────────────────────
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": true,
+    "markdown": true,
+    "scminput": false,
+    "yaml": true,
+    "helm": true
+  },
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Generate commit messages using Conventional Commits with a gitmoji. Format: <type>(<scope>): <gitmoji> <description>. The scope is optional; omit the parentheses entirely when the change spans the whole repository. Always write in English."
+    },
+    {
+      "text": "Description rules: use the imperative mood (\"add\", not \"added\" or \"adds\"), start with a lowercase letter, do not end with a period, and keep the subject line under 72 characters. Describe what the change does, not which files were touched. For breaking changes append an exclamation mark after the type or scope (e.g. feat(api)!: ...) and add a BREAKING CHANGE footer explaining the migration."
+    },
+    {
+      "text": "Valid types: feat, fix, docs, style, refactor, perf, test, chore, ci, build, revert. Pick the single most specific gitmoji for the change; never use more than one. When several apply, prefer the one describing the intent over the one describing the mechanism. If nothing fits well, fall back to the emoji matching the type: ✨ feat, 🐛 fix, 📝 docs, 💄 style, ♻️ refactor, ⚡️ perf, ✅ test, 🔧 chore, 👷 ci, 📦️ build, ⏪️ revert."
+    },
+    {
+      "text": "Gitmoji reference — Features and UX: ✨ new feature, 🚸 improve usability / UX, 💄 UI or style files, 💫 animations and transitions, 📱 responsive design, ♿️ accessibility, 🌐 i18n / l10n, ✈️ offline support, 🚩 feature flags, 🥚 easter egg | Bug fixes and error handling: 🐛 bug fix, 🚑️ critical hotfix, 🩹 minor non-critical fix, 🚨 fix compiler or linter warnings, 💚 fix CI build, ✏️ fix typos, 🥅 catch errors, 🦺 validation code, 🛂 authorization, roles, permissions | Refactoring and code health: ♻️ refactor, 🎨 improve code structure or format, ⚡️ improve performance, 🔥 remove code or files, ⚰️ remove dead code, 🗑️ deprecate code, 💩 knowingly bad code to revisit, 🏗️ architectural changes, 👔 business logic, 🧵 multithreading or concurrency, 🦖 backwards compatibility, 👽️ update due to external API changes, 🚚 move or rename resources, 💥 breaking changes | Tests: ✅ add, update, or pass tests, 🧪 add a failing test, 📸 snapshots, 🤡 mocks, ⚗️ experiments | Documentation and metadata: 📝 documentation, 💡 comments in source code, 💬 text and literals, 📄 license, 👥 contributors, 🏷️ types."
+    },
+    {
+      "text": "Gitmoji reference (continued) — Dependencies and configuration: ⬆️ upgrade dependencies, ⬇️ downgrade dependencies, ➕ add a dependency, ➖ remove a dependency, 📌 pin dependencies, 🔧 configuration files, 🔨 development scripts, 🙈 .gitignore, 📦️ compiled files or packages | CI, release and infrastructure: 👷 CI build system, 🚀 deployment, 🧱 infrastructure changes, 🩺 healthcheck, 🔖 release or version tag, 🔀 merge branches, ⏪️ revert changes, 🚧 work in progress | Data and observability: 🗃️ database changes, 🌱 seed files, 🔊 add or update logs, 🔇 remove logs, 📈 analytics or tracking, 🧐 data exploration or inspection, 🔍️ SEO | Security: 🔒️ fix security or privacy issue, 🔐 add or update secrets | Project and miscellaneous: 🎉 initial commit / begin a project, 🍱 assets, 🧑‍💻 developer experience, 💸 sponsorship or money-related infrastructure, 🍻 code written without much care."
+    },
+    {
+      "text": "Examples: feat(auth): ✨ add SSO login via OIDC | fix(api): 🐛 handle empty payload on webhook retry | perf(db): ⚡️ batch cluster status queries | ci: 👷 run helm lint on pull requests | chore(deps): ⬆️ bump argo-cd chart to 7.8.2 | refactor(core)!: 💥 drop the legacy config loader"
+    }
+  ],
+  "chat.agent.enabled": true,
+  "chat.viewSessions.orientation": "stacked",
   "chat.tools.terminal.autoApprove": {
     "pnpm": true
   },
-  "github.copilot.chat.commitMessageGeneration.instructions": [
-    {
-      "text": "Utiliser le format Conventional Commits avec gitmoji. Format: <type>(<scope>): <gitmoji> <description>. La description est toujours en anglais. Types valides: feat, fix, docs, style, refactor, perf, test, chore, ci, build. Exemples: feat(auth): ✨ add user login, fix(api): 🐛 resolve timeout issue, docs: 📝  update README, style(ui): 🎨 improve button colors, refactor(core): ♻️ simplify logic, perf(db): ⚡️ optimize queries, test(api): ✅ add unit tests, chore(deps): 🔧 update dependencies, ci: 👷 configure GitHub Actions, build: 📦 update webpack config"
-    }
-  ],
-  "claudeCode.preferredLocation": "panel",
-  "github.copilot.nextEditSuggestions.enabled": true,
-  "chat.viewSessions.orientation": "stacked",
-  "yaml.disableSchemaDetection": [
-    "**/.github/workflows/*.yml",
-    "**/.github/workflows/*.yaml",
-    "**/.gitea/workflows/*.yml",
-    "**/.gitea/workflows/*.yaml",
-    "**/.forgejo/workflows/*.yml",
-    "**/.forgejo/workflows/*.yaml"
-  ]
+  "claudeCode.preferredLocation": "panel"
 }
