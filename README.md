@@ -15,6 +15,7 @@ A collection of usefull (or not) scripts and dotfiles.
 | [gh-list-node-versions.sh](shell/gh-list-node-versions.sh)               | List, in a file, all repositories node version's               |
 | [gitmoji.sh](shell/gitmoji.sh)                                           | Add gitmoji support to your git commits cli                    |
 | [kube-secrets.sh](shell/kube-secrets.sh)                                 | Backup, transfer or restore Kubernetes secrets                 |
+| [kube-routine.sh](shell/kube-routine.sh)                                 | Run the daily, weekly or monthly Kubernetes ops routine        |
 | [rsync-time-window.sh](shell/rsync-time-window.sh)                       | Rsync files within a specific time window                      |
 
 Thanks to [@this-is-tobi](https://github.com/this-is-tobi) for the shell scripts structure inspiration.
