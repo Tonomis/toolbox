@@ -67,7 +67,6 @@
   },
   // languages
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "javascript.preferences.quoteStyle": "single",
   "javascript.preferences.importModuleSpecifierEnding": "js",
@@ -115,17 +114,71 @@
   "window.restoreWindows": "none",
   "window.menuBarVisibility": "toggle",
   "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "workbench.preferredHighContrastColorTheme": "GitHub Dark",
   "terminal.external.linuxExec": "Konsole",
   "terminal.integrated.tabs.defaultColor": "terminal.ansiBlack",
   "workbench.colorTheme": "GitHub Dark",
   "workbench.preferredHighContrastLightColorTheme": "GitHub Dark",
+  // yaml — disable validation globally, re-enable only for plain yaml files
+  // (prevents Red Hat YAML extension from validating Helm templates)
+  "yaml.validate": false,
   "yaml.schemas": {
-    "file:///home/florian/.vscode/extensions/docsmsft.docs-yaml-1.0.4/dist/toc.schema.json": "/toc\\.yml/i"
+    "https://json.schemastore.org/chart.json": "**/helm/Chart.yaml",
+    "file:///home/florian/.vscode/extensions/docsmsft.docs-yaml-1.0.6/dist/toc.schema.json": "/toc\\.yml/i"
+  },
+  "redhat.telemetry.enabled": false,
+  "[yaml]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[helm-template]": {
+    "editor.formatOnSave": false
   },
   "diffEditor.ignoreTrimWhitespace": false,
-  "github.copilot.editor.enableAutoCompletions": true,
-  "scm.experimental.showHistoryGraph": true
+  "scm.experimental.showHistoryGraph": true,
+  "explorer.confirmPasteNative": false,
+  "editor.gotoLocation.multipleDefinitions": "goto",
+  "eslint.nodeEnv": "",
+  "eslint.nodePath": "~/.local/share/pnpm",
+  "github.copilot.advanced": {
+
+    
+  },
+  "chat.agent.enabled": true,
+  "docker.extension.enableComposeLanguageServer": false,
+  "github.copilot.selectedCompletionModel": "",
+  "markdown.extension.completion.enabled": true,
+  "[dockercompose]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    },
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "chat.tools.terminal.autoApprove": {
+    "pnpm": true
+  },
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "text": "Utiliser le format Conventional Commits avec gitmoji. Format: <type>(<scope>): <gitmoji> <description>. La description est toujours en anglais. Types valides: feat, fix, docs, style, refactor, perf, test, chore, ci, build. Exemples: feat(auth): ✨ add user login, fix(api): 🐛 resolve timeout issue, docs: 📝  update README, style(ui): 🎨 improve button colors, refactor(core): ♻️ simplify logic, perf(db): ⚡️ optimize queries, test(api): ✅ add unit tests, chore(deps): 🔧 update dependencies, ci: 👷 configure GitHub Actions, build: 📦 update webpack config"
+    }
+  ],
+  "claudeCode.preferredLocation": "panel",
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "chat.viewSessions.orientation": "stacked",
+  "yaml.disableSchemaDetection": [
+    "**/.github/workflows/*.yml",
+    "**/.github/workflows/*.yaml",
+    "**/.gitea/workflows/*.yml",
+    "**/.gitea/workflows/*.yaml",
+    "**/.forgejo/workflows/*.yml",
+    "**/.forgejo/workflows/*.yaml"
+  ]
 }
