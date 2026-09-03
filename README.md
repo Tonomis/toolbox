@@ -24,5 +24,5 @@ Thanks to [@this-is-tobi](https://github.com/this-is-tobi) for the shell scripts
 | ---------------------------------------------------------------- | ----------------------- |
 | [dotfiles/.zshrc](dotfiles/.zshrc)                               | Zsh configuration file. |
 | [dotfiles/.gitconfig](dotfiles/.gitconfig)                       | Git configuration file. |
-| [dotfiles/.vscode/settings.json](dotfiles/.vscode/settings.json) | VSCode settings file.   |
+| [dotfiles/.config/Code/User/settings.json](dotfiles/.config/Code/User/settings.json) | VSCode settings file. |
 
